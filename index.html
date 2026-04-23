@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DesbloquearFácil – Acesse Conteúdo Premium Grátis</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #13131a;
+    --card: #1a1a26;
+    --border: #2a2a40;
+    --accent: #00e5ff;
+    --accent2: #ff3b6b;
+    --gold: #ffd700;
+    --green: #00e676;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --glow: 0 0 30px rgba(0,229,255,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ---- BACKGROUND ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(0,229,255,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 80%, rgba(255,59,107,0.06) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- NAVBAR ---- */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(18px);
+    background: rgba(10,10,15,0.85);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--accent); }
+  .nav-badge {
+    background: var(--accent2);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    animation: pulse-badge 2s infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100% { opacity:1; } 50% { opacity:0.7; }
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 60px 24px 40px;
+  }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid rgba(0,229,255,0.25);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 6vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .hero h1 .hl { color: var(--accent); }
+  .hero p {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 480px;
+    margin: 0 auto 30px;
+    line-height: 1.6;
+  }
+
+  /* ---- CONTENT CARD (locked) ---- */
+  .content-wrapper {
+    position: relative; z-index: 1;
+    max-width: 700px;
+    margin: 0 auto 40px;
+    padding: 0 16px;
+  }
+  .content-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--glow);
+  }
+  .content-preview {
+    padding: 28px 28px 0;
+    position: relative;
+  }
+  .content-meta {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 14px;
+  }
+  .tag {
+    background: rgba(0,229,255,0.12);
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .tag.red { background: rgba(255,59,107,0.12); color: var(--accent2); }
+  .tag.gold { background: rgba(255,215,0,0.12); color: var(--gold); }
+  .content-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .content-text {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    filter: blur(5px);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .blur-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(transparent, var(--card));
+  }
+
+  /* ---- LOCK BOX ---- */
+  .lock-box {
+    padding: 28px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .lock-icon {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--accent2), #ff6b9d);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 1.8rem;
+    box-shadow: 0 8px 30px rgba(255,59,107,0.35);
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  .lock-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .lock-box p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  /* ---- PROGRESS ---- */
+  .progress-area {
+    margin-bottom: 22px;
+  }
+  .progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-label strong { color: var(--text); }
+  .progress-bar {
+    height: 8px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), #00bcd4);
+    border-radius: 99px;
+    transition: width 0.6s ease;
+    width: 0%;
+  }
+
+  /* ---- TASKS ---- */
+  .tasks-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+  }
+  .task-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,229,255,0.04), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .task-item:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .task-item:hover::before { opacity: 1; }
+  .task-item.done {
+    border-color: var(--green);
+    background: rgba(0,230,118,0.05);
+    pointer-events: none;
+  }
+  .task-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .task-icon.blue  { background: rgba(0,229,255,0.12); }
+  .task-icon.pink  { background: rgba(255,59,107,0.12); }
+  .task-icon.gold  { background: rgba(255,215,0,0.12); }
+  .task-icon.green { background: rgba(0,230,118,0.12); }
+  .task-icon.purple{ background: rgba(179,136,255,0.12); }
+  .task-body { flex: 1; text-align: left; }
+  .task-name {
+    font-weight: 600;
+    font-size: 0.92rem;
+    margin-bottom: 3px;
+  }
+  .task-desc {
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .task-reward {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--gold);
+    background: rgba(255,215,0,0.08);
+    padding: 4px 10px;
+    border-radius: 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .task-check {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+    transition: all 0.25s;
+  }
+  .task-item.done .task-check {
+    background: var(--green);
+    border-color: var(--green);
+    color: #000;
+  }
+
+  /* ---- UNLOCK BTN ---- */
+  .btn-unlock {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent2), #ff6b9d);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 8px 30px rgba(255,59,107,0.35);
+    letter-spacing: 0.3px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .btn-unlock.active {
+    opacity: 1;
+    pointer-events: all;
+    animation: glow-pulse 2s infinite;
+  }
+  .btn-unlock.active:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(255,59,107,0.5); }
+  @keyframes glow-pulse {
+    0%,100% { box-shadow: 0 8px 30px rgba(255,59,107,0.35); }
+    50% { box-shadow: 0 8px 50px rgba(255,59,107,0.6); }
+  }
+
+  /* ---- UNLOCKED STATE ---- */
+  .unlocked-content {
+    display: none;
+    padding: 28px;
+    border-top: 1px solid var(--green);
+    text-align: left;
+    animation: fadeIn 0.5s ease;
+  }
+  .unlocked-content.show { display: block; }
+  @keyframes fadeIn {
+    from { opacity:0; transform:translateY(10px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+  .unlocked-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(0,230,118,0.08);
+    border: 1px solid rgba(0,230,118,0.25);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    color: var(--green);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .unlocked-text {
+    color: var(--text);
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+  .unlocked-text h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--accent);
+  }
+
+  /* ---- HOW IT WORKS ---- */
+  .how-section {
+    position: relative; z-index: 1;
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 0 16px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media(max-width:500px) { .steps { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+  .step-num {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #00bcd4);
+    color: #000;
+    font-weight: 800;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .step h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+  .step p { color: var(--muted); font-size: 0.78rem; line-height: 1.5; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    line-height: 1.8;
+  }
+  footer a { color: var(--muted); text-decoration: underline; cursor: pointer; }
+
+  /* ---- MODAL ---- */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px 28px;
+    max-width: 380px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .modal-overlay.show .modal { transform: scale(1); }
+  .modal-app-icon {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 16px;
+  }
+  .modal h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .modal p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .modal-steps {
+    text-align: left;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .modal-steps li {
+    list-style: none;
+    font-size: 0.83rem;
+    color: var(--text);
+    padding: 5px 0;
+    display: flex; gap: 8px;
+    line-height: 1.4;
+  }
+  .modal-steps li span { color: var(--accent); font-weight: 700; flex-shrink: 0; }
+  .btn-modal-go {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent2), #ff6b9d);
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+  .btn-modal-go:hover { transform: translateY(-2px); }
+  .btn-modal-cancel {
+    background: none; border: none;
+    color: var(--muted); font-size: 0.82rem;
+    cursor: pointer; padding: 6px;
+    transition: color 0.2s;
+  }
+  .btn-modal-cancel:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Desbloquear<span>Fácil</span></div>
+  <div class="nav-badge">🔥 CONTEÚDO EXCLUSIVO</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">⚡ Acesso Gratuito Disponível</div>
+  <h1>Desbloqueie <span class="hl">Conteúdo Premium</span><br>em Segundos</h1>
+  <p>Complete as tarefas rápidas abaixo para liberar acesso imediato e 100% gratuito ao conteúdo exclusivo.</p>
+</div>
+
+<!-- CONTENT CARD -->
+<div class="content-wrapper">
+  <div class="content-card">
+
+    <!-- Preview (blurred) -->
+    <div class="content-preview" id="preview-area">
+      <div class="content-meta">
+        <span class="tag">🔒 Bloqueado</span>
+        <span class="tag red">Premium</span>
+        <span class="tag gold">⭐ Exclusivo</span>
+      </div>
+      <div class="content-title">Conteúdo Premium Completo – Acesso Total</div>
+      <div class="content-text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...
+      </div>
+      <div class="blur-overlay"></div>
+    </div>
+
+    <!-- Lock box -->
+    <div class="lock-box" id="lock-box">
+      <div class="lock-icon">🔐</div>
+      <h2>Conteúdo Bloqueado</h2>
+      <p>Para liberar, complete <strong>todas as tarefas</strong> abaixo. É rápido e 100% gratuito!</p>
+
+      <!-- Progress -->
+      <div class="progress-area">
+        <div class="progress-label">
+          <span>Progresso</span>
+          <strong id="progress-count">0 / 3 tarefas</strong>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Tasks -->
+      <div class="tasks-label">📋 Tarefas Obrigatórias</div>
+      <div class="task-list">
+
+        <div class="task-item" id="task-1" onclick="openModal(1)">
+          <div class="task-icon blue">📱</div>
+          <div class="task-body">
+            <div class="task-name">Baixar App Grátis #1</div>
+            <div class="task-desc">Instale e abra o app por 30 segundos</div>
+          </div>
+          <div class="task-reward">⚡ +1 ponto</div>
+          <div class="task-check" id="check-1">→</div>
+        </div>
+
+        <div class="task-item" id="task-2" onclick="openModal(2)">
+          <div class="task-icon pink">🎮</div>
+          <div class="task-body">
+            <div class="task-name">Baixar Jogo Grátis #2</div>
+            <div class="task-desc">Instale o jogo e alcance o nível 2</div>
+          </div>
+          <div class="task-reward">⚡ +1 ponto</div>
+          <div class="task-check" id="check-2">→</div>
+        </div>
+
+        <div class="task-item" id="task-3" onclick="openModal(3)">
+          <div class="task-icon gold">🛍️</div>
+          <div class="task-body">
+            <div class="task-name">Cadastro Rápido #3</div>
+            <div class="task-desc">Crie uma conta grátis no parceiro</div>
+          </div>
+          <div class="task-reward">⚡ +1 ponto</div>
+          <div class="task-check" id="check-3">→</div>
+        </div>
+
+      </div>
+
+      <button class="btn-unlock" id="btn-unlock" onclick="doUnlock()">
+        🔓 Desbloquear Conteúdo
+      </button>
+    </div>
+
+    <!-- Unlocked content -->
+    <div class="unlocked-content" id="unlocked-area">
+      <div class="unlocked-banner">
+        ✅ Parabéns! Conteúdo desbloqueado com sucesso!
+      </div>
+      <div class="unlocked-text">
+        <h3>🎉 Conteúdo Completo – Acesso Liberado</h3>
+        <p>Aqui vai o seu conteúdo exclusivo! Substitua este texto pelo conteúdo real que você deseja oferecer — pode ser um link de download, uma senha, um tutorial, um vídeo, imagens, ou qualquer material premium.</p>
+        <br>
+        <p><strong>🔗 Link Exclusivo:</strong> <a href="#" style="color:var(--accent);">Clique aqui para acessar →</a></p>
+        <br>
+        <p><strong>🔑 Código de Acesso:</strong> <code style="background:var(--surface);padding:4px 10px;border-radius:6px;color:var(--gold);">SEU-CODIGO-AQUI</code></p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="section-title">Como funciona?</div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <h4>Complete as tarefas</h4>
+      <p>Baixe os apps parceiros para desbloquear o conteúdo premium.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <h4>Desbloqueie na hora</h4>
+      <p>Após completar todas as tarefas, o conteúdo é liberado automaticamente.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <h4>Acesso 100% grátis</h4>
+      <p>Sem pagar nada. O acesso é custeado pelos nossos parceiros afiliados.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  © 2026 DesbloquearFácil · Todos os direitos reservados<br>
+  <a onclick="alert('Política de Privacidade')">Política de Privacidade</a> &nbsp;|&nbsp;
+  <a onclick="alert('Termos de Uso')">Termos de Uso</a> &nbsp;|&nbsp;
+  <a onclick="alert('Contato')">Contato</a><br><br>
+  <small>Este site contém links de afiliados. Ao baixar os aplicativos, você nos ajuda a manter o conteúdo gratuito.</small>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal">
+    <div class="modal-app-icon" id="modal-icon"></div>
+    <h3 id="modal-title"></h3>
+    <p id="modal-desc"></p>
+    <ul class="modal-steps" id="modal-steps"></ul>
+    <button class="btn-modal-go" id="modal-btn-go" onclick="completeTask()">
+      📥 Ir para o app e completar
+    </button>
+    <button class="btn-modal-cancel" onclick="closeModal()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+  const tasks = {
+    1: {
+      icon: '📱',
+      iconBg: 'background: rgba(0,229,255,0.15)',
+      title: 'Baixar App Grátis #1',
+      desc: 'Instale o aplicativo parceiro pelo link abaixo. Após instalar, abra e aguarde 30 segundos para confirmar.',
+      steps: [
+        'Clique em "Ir para o app"',
+        'Instale o aplicativo na sua loja',
+        'Abra o app por pelo menos 30 segundos',
+        'Volte aqui e o ponto será creditado automaticamente'
+      ],
+      // 👉 COLOQUE SEU LINK DE AFILIADO AQUI:
+      link: 'https://seulink-afiliado-1.com'
+    },
+    2: {
+      icon: '🎮',
+      iconBg: 'background: rgba(255,59,107,0.15)',
+      title: 'Baixar Jogo #2',
+      desc: 'Baixe o jogo parceiro e alcance o nível 2 para confirmar sua participação.',
+      steps: [
+        'Clique em "Ir para o app"',
+        'Baixe o jogo na sua loja',
+        'Abra e chegue ao nível 2',
+        'Volte aqui para confirmar'
+      ],
+      // 👉 COLOQUE SEU LINK DE AFILIADO AQUI:
+      link: 'https://seulink-afiliado-2.com'
+    },
+    3: {
+      icon: '🛍️',
+      iconBg: 'background: rgba(255,215,0,0.15)',
+      title: 'Cadastro Rápido #3',
+      desc: 'Crie uma conta grátis no site parceiro. Não precisa comprar nada!',
+      steps: [
+        'Clique em "Ir para o app"',
+        'Acesse o site do parceiro',
+        'Crie uma conta gratuita (leva 1 min)',
+        'Volte aqui após o cadastro'
+      ],
+      // 👉 COLOQUE SEU LINK DE AFILIADO AQUI:
+      link: 'https://seulink-afiliado-3.com'
+    }
+  };
+
+  let currentTask = null;
+  let completedTasks = new Set();
+  const TOTAL = 3;
+
+  function openModal(id) {
+    if (completedTasks.has(id)) return;
+    currentTask = id;
+    const t = tasks[id];
+    document.getElementById('modal-icon').style.cssText = t.iconBg + '; width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;';
+    document.getElementById('modal-icon').textContent = t.icon;
+    document.getElementById('modal-title').textContent = t.title;
+    document.getElementById('modal-desc').textContent = t.desc;
+    const ul = document.getElementById('modal-steps');
+    ul.innerHTML = t.steps.map((s, i) => `<li><span>${i+1}.</span>${s}</li>`).join('');
+    document.getElementById('modal-btn-go').onclick = () => {
+      window.open(t.link, '_blank');
+      setTimeout(() => completeTask(), 3000); // auto-completa após 3s (simula retorno)
+    };
+    document.getElementById('modal-overlay').classList.add('show');
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('show');
+    currentTask = null;
+  }
+
+  function completeTask() {
+    if (!currentTask) return;
+    const id = currentTask;
+    completedTasks.add(id);
+
+    const taskEl = document.getElementById(`task-${id}`);
+    const checkEl = document.getElementById(`check-${id}`);
+    taskEl.classList.add('done');
+    checkEl.textContent = '✓';
+
+    updateProgress();
+    closeModal();
+  }
+
+  function updateProgress() {
+    const count = completedTasks.size;
+    document.getElementById('progress-count').textContent = `${count} / ${TOTAL} tarefas`;
+    document.getElementById('progress-fill').style.width = `${(count / TOTAL) * 100}%`;
+
+    if (count === TOTAL) {
+      document.getElementById('btn-unlock').classList.add('active');
+    }
+  }
+
+  function doUnlock() {
+    if (completedTasks.size < TOTAL) return;
+
+    // Esconde o lock box, mostra conteúdo desbloqueado
+    document.getElementById('lock-box').style.display = 'none';
+    document.getElementById('preview-area').querySelector('.content-text').style.filter = 'none';
+    document.getElementById('preview-area').querySelector('.blur-overlay').style.display = 'none';
+    document.getElementById('preview-area').querySelector('.tag').textContent = '✅ Desbloqueado';
+    document.getElementById('unlocked-area').classList.add('show');
+
+    // Scroll para o conteúdo
+    document.getElementById('unlocked-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+</script>
+</body>
+</html>

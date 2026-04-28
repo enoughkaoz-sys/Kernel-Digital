@@ -730,8 +730,9 @@
     if (completedTasks.has(id)) return;
     currentTask = id;
     const t = tasks[id];
-    document.getElementById('modal-icon').style.cssText = t.iconBg + '; width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;';
-    document.getElementById('modal-icon').textContent = t.icon;
+    const modalIcon = document.getElementById('modal-icon');
+    modalIcon.style.cssText = t.iconBg + '; width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;';
+    modalIcon.textContent = t.icon;
     document.getElementById('modal-title').textContent = t.title;
     document.getElementById('modal-desc').textContent = t.desc;
     const ul = document.getElementById('modal-steps');
@@ -775,15 +776,18 @@
   function doUnlock() {
     if (completedTasks.size < TOTAL) return;
 
+    const previewArea = document.getElementById('preview-area');
+    const unlockedArea = document.getElementById('unlocked-area');
+
     // Esconde o lock box, mostra conteúdo desbloqueado
     document.getElementById('lock-box').style.display = 'none';
-    document.getElementById('preview-area').querySelector('.content-text').style.filter = 'none';
-    document.getElementById('preview-area').querySelector('.blur-overlay').style.display = 'none';
-    document.getElementById('preview-area').querySelector('.tag').textContent = '✅ Desbloqueado';
-    document.getElementById('unlocked-area').classList.add('show');
+    previewArea.querySelector('.content-text').style.filter = 'none';
+    previewArea.querySelector('.blur-overlay').style.display = 'none';
+    previewArea.querySelector('.tag').textContent = '✅ Desbloqueado';
+    unlockedArea.classList.add('show');
 
     // Scroll para o conteúdo
-    document.getElementById('unlocked-area').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    unlockedArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 </script>
 </body>

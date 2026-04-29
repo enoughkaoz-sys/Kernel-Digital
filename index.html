@@ -726,26 +726,42 @@
   let completedTasks = new Set();
   const TOTAL = 3;
 
+  // Cache static DOM elements to improve performance
+  const DOM = {
+    modalIcon: document.getElementById('modal-icon'),
+    modalTitle: document.getElementById('modal-title'),
+    modalDesc: document.getElementById('modal-desc'),
+    modalSteps: document.getElementById('modal-steps'),
+    modalBtnGo: document.getElementById('modal-btn-go'),
+    modalOverlay: document.getElementById('modal-overlay'),
+    progressCount: document.getElementById('progress-count'),
+    progressFill: document.getElementById('progress-fill'),
+    btnUnlock: document.getElementById('btn-unlock'),
+    previewArea: document.getElementById('preview-area'),
+    unlockedArea: document.getElementById('unlocked-area'),
+    lockBox: document.getElementById('lock-box')
+  };
+
   function openModal(id) {
     if (completedTasks.has(id)) return;
     currentTask = id;
     const t = tasks[id];
-    const modalIcon = document.getElementById('modal-icon');
-    modalIcon.style.cssText = t.iconBg + '; width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;';
-    modalIcon.textContent = t.icon;
-    document.getElementById('modal-title').textContent = t.title;
-    document.getElementById('modal-desc').textContent = t.desc;
-    const ul = document.getElementById('modal-steps');
-    ul.innerHTML = t.steps.map((s, i) => `<li><span>${i+1}.</span>${s}</li>`).join('');
-    document.getElementById('modal-btn-go').onclick = () => {
+
+    DOM.modalIcon.style.cssText = t.iconBg + '; width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 16px;';
+    DOM.modalIcon.textContent = t.icon;
+    DOM.modalTitle.textContent = t.title;
+    DOM.modalDesc.textContent = t.desc;
+
+    DOM.modalSteps.innerHTML = t.steps.map((s, i) => `<li><span>${i+1}.</span>${s}</li>`).join('');
+    DOM.modalBtnGo.onclick = () => {
       window.open(t.link, '_blank');
       setTimeout(() => completeTask(), 3000); // auto-completa após 3s (simula retorno)
     };
-    document.getElementById('modal-overlay').classList.add('show');
+    DOM.modalOverlay.classList.add('show');
   }
 
   function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('show');
+    DOM.modalOverlay.classList.remove('show');
     currentTask = null;
   }
 
@@ -765,29 +781,26 @@
 
   function updateProgress() {
     const count = completedTasks.size;
-    document.getElementById('progress-count').textContent = `${count} / ${TOTAL} tarefas`;
-    document.getElementById('progress-fill').style.width = `${(count / TOTAL) * 100}%`;
+    DOM.progressCount.textContent = `${count} / ${TOTAL} tarefas`;
+    DOM.progressFill.style.width = `${(count / TOTAL) * 100}%`;
 
     if (count === TOTAL) {
-      document.getElementById('btn-unlock').classList.add('active');
+      DOM.btnUnlock.classList.add('active');
     }
   }
 
   function doUnlock() {
     if (completedTasks.size < TOTAL) return;
 
-    const previewArea = document.getElementById('preview-area');
-    const unlockedArea = document.getElementById('unlocked-area');
-
     // Esconde o lock box, mostra conteúdo desbloqueado
-    document.getElementById('lock-box').style.display = 'none';
-    previewArea.querySelector('.content-text').style.filter = 'none';
-    previewArea.querySelector('.blur-overlay').style.display = 'none';
-    previewArea.querySelector('.tag').textContent = '✅ Desbloqueado';
-    unlockedArea.classList.add('show');
+    DOM.lockBox.style.display = 'none';
+    DOM.previewArea.querySelector('.content-text').style.filter = 'none';
+    DOM.previewArea.querySelector('.blur-overlay').style.display = 'none';
+    DOM.previewArea.querySelector('.tag').textContent = '✅ Desbloqueado';
+    DOM.unlockedArea.classList.add('show');
 
     // Scroll para o conteúdo
-    unlockedArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    DOM.unlockedArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 </script>
 </body>

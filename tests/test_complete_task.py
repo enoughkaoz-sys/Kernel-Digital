@@ -3,7 +3,7 @@ import time
 import tempfile
 from playwright.sync_api import sync_playwright, expect
 
-def test_close_modal():
+def test_complete_task():
     # Create a temporary version of index.html without external fonts to avoid timeouts
     with open("index.html", "r") as f:
         content = f.read()
@@ -11,7 +11,7 @@ def test_close_modal():
     # Remove external font links that cause timeouts in the sandbox
     content = content.replace("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap", "")
 
-    # Create temporary file in system temporary directory instead of local cwd
+    # Use tempfile.NamedTemporaryFile to safely create temp file in system temp dir
     with tempfile.NamedTemporaryFile(suffix=".html", mode="w", delete=False) as tf:
         tf.write(content)
         temp_filepath = tf.name
@@ -22,7 +22,7 @@ def test_close_modal():
             context = browser.new_context()
             page = context.new_page()
 
-            # Load page via file:// protocol directly
+            # Open the file via file:// protocol directly
             page.goto(f"file://{temp_filepath}", wait_until="load")
 
             # Wait for openModal to be defined
@@ -37,27 +37,36 @@ def test_close_modal():
             else:
                 raise RuntimeError("openModal was not defined in time")
 
-            # Trigger openModal(1)
+            # Trigger openModal(1) to set currentTask
             page.evaluate("openModal(1)")
 
-            # Verify the #modal-overlay element has the 'show' class
+            # Trigger completeTask()
+            page.evaluate("completeTask()")
+
+            # Verify task element has 'done' class
+            task_el = page.locator("#task-1")
+            expect(task_el).to_have_class("task-item done")
+
+            # Verify check element text is '✓'
+            check_el = page.locator("#check-1")
+            expect(check_el).to_have_text("✓")
+
+            # Verify completedTasks Set contains 1
+            has_completed = page.evaluate("completedTasks.has(1)")
+            assert has_completed is True, "completedTasks should contain 1"
+
+            # Verify progress update (assuming TOTAL is 2 based on count / TOTAL logic)
+            total_tasks = page.evaluate("TOTAL")
+            progress_count = page.locator("#progress-count")
+            expect(progress_count).to_have_text(f"1 / {total_tasks} tarefas")
+
+            # Check modal closed (closeModal was called)
             overlay = page.locator("#modal-overlay")
-            expect(overlay).to_have_class("modal-overlay show")
-
-            # Verify currentTask is 1
-            current_task = page.evaluate("currentTask")
-            assert current_task == 1, f"Expected currentTask to be 1, but got {current_task}"
-
-            # Click the "Cancelar" button to trigger closeModal()
-            cancel_button = page.locator(".btn-modal-cancel")
-            cancel_button.click()
-
-            # Verify the #modal-overlay element no longer has the 'show' class
             expect(overlay).to_have_class("modal-overlay")
 
-            # Verify that the JavaScript variable currentTask is null
-            current_task_after = page.evaluate("currentTask")
-            assert current_task_after is None, f"Expected currentTask to be None, but got {current_task_after}"
+            # Verify currentTask is null
+            current_task = page.evaluate("currentTask")
+            assert current_task is None, f"Expected currentTask to be null, got {current_task}"
 
             print("Test passed successfully!")
             browser.close()
@@ -66,4 +75,4 @@ def test_close_modal():
             os.remove(temp_filepath)
 
 if __name__ == "__main__":
-    test_close_modal()
+    test_complete_task()

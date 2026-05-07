@@ -752,6 +752,9 @@
     progressFill: document.getElementById('progress-fill'),
     btnUnlock: document.getElementById('btn-unlock'),
     previewArea: document.getElementById('preview-area'),
+    previewText: document.querySelector('#preview-area .content-text'),
+    previewBlur: document.querySelector('#preview-area .blur-overlay'),
+    previewTag: document.querySelector('#preview-area .tag'),
     unlockedArea: document.getElementById('unlocked-area'),
     lockBox: document.getElementById('lock-box')
   };
@@ -808,9 +811,12 @@
 
     // Esconde o lock box, mostra conteúdo desbloqueado
     DOM.lockBox.style.display = 'none';
-    DOM.previewArea.querySelector('.content-text').style.filter = 'none';
-    DOM.previewArea.querySelector('.blur-overlay').style.display = 'none';
-    DOM.previewArea.querySelector('.tag').textContent = '✅ Desbloqueado';
+
+    // ⚡ Bolt: Use globally cached DOM elements to avoid repetitive querySelector overhead during UI update
+    DOM.previewText.style.filter = 'none';
+    DOM.previewBlur.style.display = 'none';
+    DOM.previewTag.textContent = '✅ Desbloqueado';
+
     DOM.unlockedArea.classList.add('show');
 
     // Scroll para o conteúdo

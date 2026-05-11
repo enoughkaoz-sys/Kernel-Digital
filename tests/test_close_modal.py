@@ -11,25 +11,17 @@ def test_close_modal():
     time.sleep(2) # Wait for server to start
 
     try:
-        # Create a temporary version of index.html without external fonts to avoid timeouts
-        with open("index.html", "r") as f:
-            content = f.read()
-
-        # Remove external font links that cause timeouts in the sandbox
-        content = content.replace("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap", "")
-
-        with tempfile.NamedTemporaryFile(suffix=".html", mode="w", delete=False, dir=os.getcwd()) as tf:
-            tf.write(content)
-            temp_filename = os.path.basename(tf.name)
-
         try:
             with sync_playwright() as p:
                 browser = p.chromium.launch(headless=True)
                 context = browser.new_context()
                 page = context.new_page()
 
-                # Use http server to serve the temporary file
-                page.goto(f"http://localhost:8001/{temp_filename}", wait_until="load")
+                # Route to block external fonts to avoid timeouts
+                page.route("**/*", lambda route: route.abort() if "fonts.googleapis.com" in route.request.url or "fonts.gstatic.com" in route.request.url else route.continue_())
+
+                # Use http server to serve the original file
+                page.goto(f"http://localhost:8001/index.html", wait_until="load")
 
                 # Wait for openModal to be defined
                 for _ in range(100):
@@ -67,9 +59,8 @@ def test_close_modal():
 
                 print("Test passed successfully!")
                 browser.close()
-        finally:
-            if os.path.exists(temp_filename):
-                os.remove(temp_filename)
+        except Exception as e:
+            raise e
     finally:
         os.kill(server_process.pid, signal.SIGTERM)
 

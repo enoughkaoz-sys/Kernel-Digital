@@ -11,65 +11,53 @@ def test_close_modal():
     time.sleep(2) # Wait for server to start
 
     try:
-        # Create a temporary version of index.html without external fonts to avoid timeouts
-        with open("index.html", "r") as f:
-            content = f.read()
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context()
+            page = context.new_page()
 
-        # Remove external font links that cause timeouts in the sandbox
-        content = content.replace("https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap", "")
+            # Intercept and abort external font requests to avoid timeouts in the sandbox
+            page.route("**/*", lambda route: route.abort() if "fonts.googleapis.com" in route.request.url or "fonts.gstatic.com" in route.request.url else route.continue_())
 
-        with tempfile.NamedTemporaryFile(suffix=".html", mode="w", delete=False, dir=os.getcwd()) as tf:
-            tf.write(content)
-            temp_filename = os.path.basename(tf.name)
+            # Use http server to serve the local index.html
+            page.goto("http://localhost:8001/index.html", wait_until="load")
 
-        try:
-            with sync_playwright() as p:
-                browser = p.chromium.launch(headless=True)
-                context = browser.new_context()
-                page = context.new_page()
+            # Wait for openModal to be defined
+            for _ in range(100):
+                try:
+                    is_defined = page.evaluate("typeof openModal !== 'undefined'")
+                    if is_defined:
+                        break
+                except Exception:
+                    pass
+                time.sleep(0.1)
+            else:
+                raise RuntimeError("openModal was not defined in time")
 
-                # Use http server to serve the temporary file
-                page.goto(f"http://localhost:8001/{temp_filename}", wait_until="load")
+            # Trigger openModal(1)
+            page.evaluate("openModal(1)")
 
-                # Wait for openModal to be defined
-                for _ in range(100):
-                    try:
-                        is_defined = page.evaluate("typeof openModal !== 'undefined'")
-                        if is_defined:
-                            break
-                    except Exception:
-                        pass
-                    time.sleep(0.1)
-                else:
-                    raise RuntimeError("openModal was not defined in time")
+            # Verify the #modal-overlay element has the 'show' class
+            overlay = page.locator("#modal-overlay")
+            expect(overlay).to_have_class("modal-overlay show")
 
-                # Trigger openModal(1)
-                page.evaluate("openModal(1)")
+            # Verify currentTask is 1
+            current_task = page.evaluate("currentTask")
+            assert current_task == 1, f"Expected currentTask to be 1, but got {current_task}"
 
-                # Verify the #modal-overlay element has the 'show' class
-                overlay = page.locator("#modal-overlay")
-                expect(overlay).to_have_class("modal-overlay show")
+            # Click the "Cancelar" button to trigger closeModal()
+            cancel_button = page.locator(".btn-modal-cancel")
+            cancel_button.click()
 
-                # Verify currentTask is 1
-                current_task = page.evaluate("currentTask")
-                assert current_task == 1, f"Expected currentTask to be 1, but got {current_task}"
+            # Verify the #modal-overlay element no longer has the 'show' class
+            expect(overlay).to_have_class("modal-overlay")
 
-                # Click the "Cancelar" button to trigger closeModal()
-                cancel_button = page.locator(".btn-modal-cancel")
-                cancel_button.click()
+            # Verify that the JavaScript variable currentTask is null
+            current_task_after = page.evaluate("currentTask")
+            assert current_task_after is None, f"Expected currentTask to be None, but got {current_task_after}"
 
-                # Verify the #modal-overlay element no longer has the 'show' class
-                expect(overlay).to_have_class("modal-overlay")
-
-                # Verify that the JavaScript variable currentTask is null
-                current_task_after = page.evaluate("currentTask")
-                assert current_task_after is None, f"Expected currentTask to be None, but got {current_task_after}"
-
-                print("Test passed successfully!")
-                browser.close()
-        finally:
-            if os.path.exists(temp_filename):
-                os.remove(temp_filename)
+            print("Test passed successfully!")
+            browser.close()
     finally:
         os.kill(server_process.pid, signal.SIGTERM)
 

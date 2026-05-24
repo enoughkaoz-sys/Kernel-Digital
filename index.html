@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DesbloquearFácil – Ferramentas FRP e PayJoy</title>
+<!-- Preconnect to Google Fonts to reduce latency and speed up First Contentful Paint (FCP) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -620,9 +623,9 @@
         <h3>🎉 Pack de Ferramentas FRP & PayJoy Liberado</h3>
         <p>Abaixo estão os links para você baixar o pacote completo contendo as ferramentas e os tutoriais passo a passo. Insira a senha fornecida para extrair os arquivos.</p>
         <br>
-        <p><strong>🔗 Ferramentas FRP:</strong> <a href="https://playabledownload.com/1892940" target="_blank" style="color:var(--accent);">Baixar FRP Unlock Pack →</a></p>
+        <p><strong>🔗 Ferramentas FRP:</strong> <a href="https://playabledownload.com/1892940" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Baixar FRP Unlock Pack →</a></p>
         <br>
-        <p><strong>🔗 Ferramentas PayJoy:</strong> <a href="https://playabledownload.com/1892940" target="_blank" style="color:var(--accent);">Baixar PayJoy Unlock Pack →</a></p>
+        <p><strong>🔗 Ferramentas PayJoy:</strong> <a href="https://playabledownload.com/1892940" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Baixar PayJoy Unlock Pack →</a></p>
         <br>
         <p><strong>🔑 Senha para extração (WinRAR/7zip):</strong> <code style="background:var(--surface);padding:4px 10px;border-radius:6px;color:var(--gold);">SENHA-AQUI-123</code></p>
       </div>
@@ -639,7 +642,7 @@
     <p style="color: var(--text); font-size: 0.95rem; line-height: 1.6; margin-bottom: 18px;">
       Descubra como monetizamos este site! Cadastre-se agora na plataforma parceira CPAGrip através do nosso link exclusivo e <strong>ganhe US$ 5,00 (Dólares) de bônus imediato</strong> na sua nova conta.
     </p>
-    <a href="https://www.cpagrip.com/signup.php?ref=2522471" target="_blank" style="display: inline-block; background: var(--gold); color: #000; font-family: 'Syne', sans-serif; font-weight: 700; padding: 14px 28px; border-radius: 12px; text-decoration: none; transition: transform 0.2s; box-shadow: 0 8px 20px rgba(255,215,0,0.2);">
+    <a href="https://www.cpagrip.com/signup.php?ref=2522471" target="_blank" rel="noopener noreferrer" style="display: inline-block; background: var(--gold); color: #000; font-family: 'Syne', sans-serif; font-weight: 700; padding: 14px 28px; border-radius: 12px; text-decoration: none; transition: transform 0.2s; box-shadow: 0 8px 20px rgba(255,215,0,0.2);">
       🔥 Quero meu bônus de US$ 5,00
     </a>
   </div>
@@ -768,7 +771,7 @@
 
     DOM.modalSteps.innerHTML = t.steps.map((s, i) => `<li><span>${i+1}.</span>${s}</li>`).join('');
     DOM.modalBtnGo.onclick = () => {
-      window.open(t.link, '_blank');
+      window.open(t.link, '_blank', 'noopener,noreferrer');
       setTimeout(() => completeTask(), 3000); // auto-completa após 3s (simula retorno)
     };
     DOM.modalOverlay.classList.add('show');
